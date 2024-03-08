@@ -1,0 +1,45 @@
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('active', 'inactive', 'pending');
+
+-- CreateTable
+CREATE TABLE "Users" (
+    "userId" INTEGER NOT NULL,
+    "username" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "role" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "createdAT" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAT" TIMESTAMP(3) NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Members" (
+    "memberID" INTEGER NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "contactNumber" TEXT,
+    "address" TEXT,
+    "membershipID" INTEGER NOT NULL,
+    "status" "Status",
+    "renewalDate" TIMESTAMP(3),
+    "memberSince" TEXT,
+    "user_Id" INTEGER NOT NULL,
+    "createdAT" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAT" TIMESTAMP(3) NOT NULL
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Users_userId_key" ON "Users"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Users_email_key" ON "Users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Members_memberID_key" ON "Members"("memberID");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Members_membershipID_key" ON "Members"("membershipID");
+
+-- AddForeignKey
+ALTER TABLE "Members" ADD CONSTRAINT "Members_user_Id_fkey" FOREIGN KEY ("user_Id") REFERENCES "Users"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;

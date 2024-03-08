@@ -12,7 +12,7 @@ export class AuthService {
     private jwt: JwtService,
   ) {}
   async signupUser(dto: UserDto): Promise<any> {
-    const email = await this.prismaService.users.findOne({
+    const email = await this.prismaService.users.findUnique({
       where: {
         email: dto.email,
         userId: dto.userId,
@@ -21,7 +21,7 @@ export class AuthService {
     if (email) {
       throw new ForbiddenException(`User ${dto.email} already exists`);
     }
-    const hash = argon.hash(dto.password);
+    const hash = await argon.hash(dto.password);
     const user = await this.prismaService.users.create({
       data: {
         userId: dto.userId,
@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   async signinIn(dto: UserDto): Promise<any> {
-    const user = await this.prismaService.users.findFirst({
+    const user = await this.prismaService.users.findUnique({
       where: {
         email: dto.email,
       },
@@ -52,7 +52,7 @@ export class AuthService {
         throw new ForbiddenException('Incorrect password');
       }
       // const token = await this.signToken(user.id, user.role);
-      return this.signToken(user.id, user.role);
+      return this.signToken(user.userId.toString(), user.role);
     }
   }
 

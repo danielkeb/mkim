@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserDto } from './dto';
+import { DtoSignin, UserDto } from './dto';
 import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -36,8 +36,17 @@ export class AuthService {
     }
     return user;
   }
-
-  async signinIn(dto: UserDto): Promise<any> {
+  async getUser() {
+    return await this.prismaService.users.findMany({
+      select: {
+        userId: true,
+        username: true,
+        role: true,
+        email: true,
+      },
+    });
+  }
+  async signinIn(dto: DtoSignin): Promise<any> {
     const user = await this.prismaService.users.findUnique({
       where: {
         email: dto.email,
@@ -52,17 +61,19 @@ export class AuthService {
         throw new ForbiddenException('Incorrect password');
       }
       // const token = await this.signToken(user.id, user.role);
-      return this.signToken(user.userId.toString(), user.role);
+      return this.signToken(user.userId, user.role, user.email);
     }
   }
 
   async signToken(
     userId: string,
     role: string,
+    email: string,
   ): Promise<{ token_access: string }> {
     const payload = {
       sub: userId,
       role,
+      email,
     };
     const secret = this.config.get('JWT_SECRET');
     const token = await this.jwt.signAsync(payload, {

@@ -1,13 +1,9 @@
--- CreateEnum
-CREATE TYPE "Status" AS ENUM ('active', 'inactive', 'pending');
-
 -- CreateTable
 CREATE TABLE "Users" (
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "role" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "createdAT" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAT" TIMESTAMP(3) NOT NULL
@@ -15,16 +11,16 @@ CREATE TABLE "Users" (
 
 -- CreateTable
 CREATE TABLE "Members" (
-    "memberID" INTEGER NOT NULL,
+    "memberID" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "contactNumber" TEXT,
     "address" TEXT,
     "membershipID" INTEGER NOT NULL,
-    "status" "Status",
+    "status" TEXT,
     "renewalDate" TIMESTAMP(3),
     "memberSince" TEXT,
-    "user_Id" INTEGER NOT NULL,
+    "user_Id" TEXT NOT NULL,
     "createdAT" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAT" TIMESTAMP(3) NOT NULL
 );

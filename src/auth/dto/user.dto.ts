@@ -10,9 +10,13 @@ import {
 export class UserDto {
   @IsString()
   @IsNotEmpty()
-  userId: number;
+  userId: string;
+
   @IsEmail()
+  @IsString()
+  @IsNotEmpty()
   email: string;
+
   @IsString()
   @IsNotEmpty()
   username: string;
@@ -34,7 +38,7 @@ enum Status {
 export class MemberDto {
   @IsString()
   @IsNotEmpty()
-  memberId: number;
+  memberId: string;
 
   @IsString()
   @IsNotEmpty()
@@ -59,4 +63,14 @@ export class MemberDto {
   @IsDate()
   @IsOptional()
   RenewalDate?: Date;
+}
+export class DtoSignin {
+  @IsNotEmpty()
+  @IsString()
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
 }
